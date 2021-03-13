@@ -1,5 +1,9 @@
 <template>
 	<div class="home">
+		<Header v-bind:homes="homes" />
+
+		<FilterBar />
+
 		<v-list>
 			<v-list-item v-for="item in items" :key="item.id">
 				<v-list-item-icon>
@@ -40,11 +44,15 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import FilterBar from "@/components/FilterBar.vue";
+import Header from "@/components/Header.vue";
 
 export default {
 	name: "Home",
-	components: {},
+	components: {
+		FilterBar,
+		Header,
+	},
 	data: () => ({
 		items: [
 			{
@@ -56,6 +64,7 @@ export default {
 			},
 			{ id: "02", name: "Tomatoes", qty: 1, home: "Boston", category: "food" },
 		],
+		homes: ["Green Point", "Boston"],
 	}),
 	methods: {
 		// openOptions() {

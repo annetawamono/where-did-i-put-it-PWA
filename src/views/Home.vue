@@ -1,11 +1,11 @@
 <template>
 	<div class="home">
-		<Header v-bind:homes="homes" />
+		<Header v-bind:homes="homes" v-on:view-select="changeView" />
 
 		<FilterBar />
 
 		<v-list>
-			<v-list-item v-for="item in items" :key="item.id">
+			<v-list-item v-for="item in filteredItems" :key="item.id">
 				<v-list-item-icon>
 					<v-menu>
 						<template v-slot:activator="{ on, attrs }">
@@ -65,11 +65,20 @@ export default {
 			{ id: "02", name: "Tomatoes", qty: 1, home: "Boston", category: "food" },
 		],
 		homes: ["Green Point", "Boston"],
+		homeView: "Green Point",
 	}),
 	methods: {
-		// openOptions() {
-		// 	alert("List Options");
-		// },
+		changeView(newView) {
+			this.homeView = newView;
+		},
+		checkList(item) {
+			return item.home == this.homeView;
+		},
+	},
+	computed: {
+		filteredItems: function () {
+			return this.items.filter(this.checkList);
+		},
 	},
 };
 </script>

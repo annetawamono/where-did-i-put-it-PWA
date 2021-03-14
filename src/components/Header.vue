@@ -12,7 +12,8 @@
 							class="select2"
 							:items="homes"
 							solo
-							v-bind:value="homes[0]"
+							v-model="selected"
+							@change="$emit('view-select', selected)"
 						></v-select>
 					</v-col>
 				</v-row>
@@ -26,6 +27,14 @@
 export default {
 	name: "Header",
 	props: ["homes"],
+	data: () => ({
+		selected: "Green Point",
+	}),
+	methods: {
+		// checkHomes() {
+		// 	alert(this.props);
+		// },
+	},
 };
 </script>
 <style>

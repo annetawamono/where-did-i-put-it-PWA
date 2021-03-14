@@ -2,43 +2,10 @@
 	<div class="home">
 		<Header v-bind:homes="homes" v-on:view-select="changeView" />
 
-		<FilterBar />
+		<FilterBar v-bind:filters="filters" v-on:filter-select="changeFilters" />
 
-		<v-list>
-			<v-list-item v-for="item in filteredItems" :key="item.id">
-				<v-list-item-icon>
-					<v-menu>
-						<template v-slot:activator="{ on, attrs }">
-							<v-icon color="secondary" v-bind="attrs" v-on="on"
-								>mdi-dots-vertical</v-icon
-							>
-						</template>
-						<v-list>
-							<v-list-item>
-								<v-list-item-title>Move to</v-list-item-title>
-							</v-list-item>
-							<v-list-item>
-								<v-list-item-title>Edit</v-list-item-title>
-							</v-list-item>
-							<v-list-item>
-								<v-list-item-title>Delete</v-list-item-title>
-							</v-list-item>
-						</v-list>
-					</v-menu>
-					<!-- <v-icon color="secondary" @click="openOptions"
-						>mdi-dots-vertical</v-icon
-					> -->
-				</v-list-item-icon>
-				<v-list-item-content>
-					<v-list-item-title>
-						{{ item.name }}
-					</v-list-item-title>
-				</v-list-item-content>
-				<v-list-item-content>
-					<v-list-item-title> Qty:{{ item.qty }} </v-list-item-title>
-				</v-list-item-content>
-			</v-list-item>
-		</v-list>
+		<ItemList v-if="selectedFilters.length > 0" v-bind:items="filteredItems" />
+		<ItemList v-else v-bind:items="houseItems" />
 	</div>
 </template>
 
@@ -46,12 +13,14 @@
 // @ is an alias to /src
 import FilterBar from "@/components/FilterBar.vue";
 import Header from "@/components/Header.vue";
+import ItemList from "@/components/ItemList.vue";
 
 export default {
 	name: "Home",
 	components: {
 		FilterBar,
 		Header,
+		ItemList,
 	},
 	data: () => ({
 		items: [
@@ -60,24 +29,58 @@ export default {
 				name: "Blanket",
 				qty: 2,
 				home: "Green Point",
-				category: "living room",
+				category: "Living room",
 			},
-			{ id: "02", name: "Tomatoes", qty: 1, home: "Boston", category: "food" },
+			{ id: "02", name: "Tomatoes", qty: 1, home: "Boston", category: "Food" },
+			{
+				id: "03",
+				name: "Jacket",
+				qty: 1,
+				home: "Boston",
+				category: "Clothing",
+			},
 		],
 		homes: ["Green Point", "Boston"],
 		homeView: "Green Point",
+		filters: [
+			"Food",
+			"Clothing",
+			"Bedroom",
+			"Laundry",
+			"Bathroom",
+			"Living room",
+		],
+		selectedFilters: [],
 	}),
 	methods: {
 		changeView(newView) {
 			this.homeView = newView;
 		},
+		changeFilters(newFilters) {
+			this.selectedFilters = newFilters;
+		},
 		checkList(item) {
 			return item.home == this.homeView;
 		},
+		checkListFilters(item) {
+			// create array of selected filters with names
+			let filters = [];
+			this.selectedFilters.forEach((i) => {
+				filters.push(this.filters[i]);
+			});
+			// return true if any selected filter is found in item and belongs to the house
+			return (
+				filters.find((filter) => filter == item.category) &&
+				this.checkList(item)
+			);
+		},
 	},
 	computed: {
-		filteredItems: function () {
+		houseItems: function () {
 			return this.items.filter(this.checkList);
+		},
+		filteredItems: function () {
+			return this.items.filter(this.checkListFilters);
 		},
 	},
 };

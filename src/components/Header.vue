@@ -4,21 +4,11 @@
 			<v-container class="pa-6">
 				<div class="header__text">
 					<h1>Where did I put it?</h1>
-					<p>I definitely put it in:</p>
+					<p>{{ pageTitle }}</p>
 				</div>
-				<v-row no-gutters>
-					<v-col cols="12" sm="4">
-						<v-select
-							class="select2"
-							:items="homes"
-							solo
-							v-model="selected"
-							@change="$emit('view-select', selected)"
-						></v-select>
-					</v-col>
-				</v-row>
+				<slot></slot>
 			</v-container>
-			<div class="divider_rounded"></div>
+			<div v-show="this.$slots.default" class="divider_rounded"></div>
 		</v-card>
 	</div>
 </template>
@@ -26,15 +16,15 @@
 <script>
 export default {
 	name: "Header",
-	props: ["homes"],
+	props: {
+		pageTitle: {
+			type: String,
+			required: true,
+		},
+	},
 	data: () => ({
 		selected: "Green Point",
 	}),
-	methods: {
-		// checkHomes() {
-		// 	alert(this.props);
-		// },
-	},
 };
 </script>
 <style>

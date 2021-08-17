@@ -1,6 +1,17 @@
 <template>
 	<div class="home">
-		<Header v-bind:homes="homes" v-on:view-select="changeView" />
+		<Header :pageTitle="pageTitle">
+			<v-row no-gutters>
+				<v-col cols="12" sm="4">
+					<v-select
+						class="select2"
+						:items="homes"
+						solo
+						v-model="homeView"
+					></v-select>
+				</v-col>
+			</v-row>
+		</Header>
 
 		<FilterBar v-bind:filters="filters" v-on:filter-select="changeFilters" />
 
@@ -23,6 +34,7 @@ export default {
 		ItemList,
 	},
 	data: () => ({
+		pageTitle: "I definitely put it in",
 		items: [
 			{
 				id: "01",

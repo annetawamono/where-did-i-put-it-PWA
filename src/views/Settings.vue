@@ -1,5 +1,19 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+	<div>
+		<Header :pageTitle="pageTitle"></Header>
+	</div>
 </template>
+
+<script>
+import Header from "../components/Header.vue";
+export default {
+	components: {
+		Header,
+	},
+	data: function () {
+		return {
+			pageTitle: "Settings",
+		};
+	},
+};
+</script>

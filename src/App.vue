@@ -3,18 +3,7 @@
 		<v-main>
 			<router-view />
 		</v-main>
-		<v-btn
-			@click="addItem"
-			fab
-			color="accent"
-			large
-			fixed
-			right
-			bottom
-			class="fab_addHome"
-		>
-			<v-icon>mdi-home-plus-outline</v-icon>
-		</v-btn>
+		<add-home></add-home>
 		<v-bottom-navigation v-model="value" color="primary" grow height="12vh">
 			<router-link to="/">
 				<v-btn color="white" value="home">
@@ -34,26 +23,17 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld';
+import AddHome from "./components/AddHome.vue";
 
 export default {
 	name: "App",
 
-	components: {},
+	components: {
+		AddHome,
+	},
 
 	data: () => ({
 		value: "home",
 	}),
-
-	methods: {
-		addItem() {
-			alert("FAB clicked");
-		},
-	},
 };
 </script>
-<style>
-.fab_addHome {
-	margin-bottom: 12vh;
-}
-</style>

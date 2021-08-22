@@ -3,7 +3,7 @@
 		<v-main>
 			<router-view />
 		</v-main>
-		<add-home></add-home>
+		<add-item></add-item>
 		<v-bottom-navigation v-model="value" color="primary" grow height="12vh">
 			<router-link to="/">
 				<v-btn color="white" value="home">
@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import AddHome from "./components/AddHome.vue";
+import AddItem from "./components/AddItem.vue";
 
 export default {
 	name: "App",
 
 	components: {
-		AddHome,
+		AddItem,
 	},
 
 	data: () => ({

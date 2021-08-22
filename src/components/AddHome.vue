@@ -17,14 +17,18 @@
 				</v-btn>
 			</template>
 			<v-card>
-				<v-card-title>Add Home</v-card-title>
+				<v-card-title>Add Item</v-card-title>
 				<v-card-text>
-					<v-select :items="['Boston', 'Greenpoint']" label="House"></v-select>
-					<v-text-field label="Item name"></v-text-field>
+					<v-select
+						:items="['Boston', 'Greenpoint']"
+						label="House"
+						v-model="home"
+					></v-select>
+					<v-text-field label="Item name" v-model="name"></v-text-field>
 					<v-subheader class="pl-0"> Qty </v-subheader>
 					<v-slider v-model="qty" thumb-label></v-slider>
 					<v-combobox
-						v-model="select"
+						v-model="category"
 						:items="['Clothing', 'Food', 'Living Room']"
 						label="Category"
 						multiple
@@ -33,9 +37,7 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="primary" outlined @click="dialog = false">
-						Confirm
-					</v-btn>
+					<v-btn color="primary" outlined @click="saveItem"> Confirm </v-btn>
 					<v-btn color="error" @click="dialog = false"> Cancel </v-btn>
 				</v-card-actions>
 			</v-card>
@@ -45,6 +47,8 @@
 
 <script>
 import { VSelect, VDialog } from "vuetify/lib";
+import { mapGetters } from "vuex";
+
 export default {
 	components: {
 		VSelect,
@@ -54,7 +58,25 @@ export default {
 		return {
 			dialog: false,
 			qty: 0,
+			name: "",
+			home: "",
+			category: "",
 		};
+	},
+	computed: {
+		...mapGetters(["houses"]),
+	},
+	methods: {
+		saveItem() {
+			// var newItem = {
+			// 	name: this.name,
+			// 	qty: this.qty,
+			// 	home: this.home,
+			// 	category: this.category,
+			// };
+			// adding to indexeddb
+			this.$store.dispatch("addHouse", { name: "Boston" });
+		},
 	},
 };
 </script>

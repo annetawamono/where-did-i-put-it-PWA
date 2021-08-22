@@ -5,7 +5,7 @@
 				<v-col cols="12" sm="4">
 					<v-select
 						class="select2"
-						:items="homes"
+						:items="houses"
 						solo
 						v-model="homeView"
 					></v-select>
@@ -25,9 +25,13 @@
 import FilterBar from "@/components/FilterBar.vue";
 import Header from "@/components/Header.vue";
 import ItemList from "@/components/ItemList.vue";
+import { mapGetters } from "vuex";
 
 export default {
 	name: "Home",
+	created() {
+		this.handleHouses();
+	},
 	components: {
 		FilterBar,
 		Header,
@@ -65,6 +69,9 @@ export default {
 		selectedFilters: [],
 	}),
 	methods: {
+		handleHouses() {
+			this.$store.dispatch("getHouses");
+		},
 		changeView(newView) {
 			this.homeView = newView;
 		},
@@ -94,6 +101,7 @@ export default {
 		filteredItems: function () {
 			return this.items.filter(this.checkListFilters);
 		},
+		...mapGetters(["houses"]),
 	},
 };
 </script>

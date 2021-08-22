@@ -31,6 +31,7 @@ export default {
 	name: "Home",
 	created() {
 		this.handleHouses();
+		this.handleItems();
 	},
 	components: {
 		FilterBar,
@@ -39,23 +40,6 @@ export default {
 	},
 	data: () => ({
 		pageTitle: "I definitely put it in",
-		items: [
-			{
-				id: "01",
-				name: "Blanket",
-				qty: 2,
-				home: "Green Point",
-				category: "Living room",
-			},
-			{ id: "02", name: "Tomatoes", qty: 1, home: "Boston", category: "Food" },
-			{
-				id: "03",
-				name: "Jacket",
-				qty: 1,
-				home: "Boston",
-				category: "Clothing",
-			},
-		],
 		homes: ["Green Point", "Boston"],
 		homeView: "Green Point",
 		filters: [
@@ -69,6 +53,9 @@ export default {
 		selectedFilters: [],
 	}),
 	methods: {
+		handleItems() {
+			this.$store.dispatch("getItems");
+		},
 		handleHouses() {
 			this.$store.dispatch("getHouses");
 		},
@@ -101,7 +88,7 @@ export default {
 		filteredItems: function () {
 			return this.items.filter(this.checkListFilters);
 		},
-		...mapGetters(["houses"]),
+		...mapGetters(["houses", "items"]),
 	},
 };
 </script>

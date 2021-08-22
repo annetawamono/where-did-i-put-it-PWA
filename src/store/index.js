@@ -15,15 +15,40 @@ export default new Vuex.Store({
     },
     pushHouse: (state, payload) => {
       state.houses.push(payload)
-    }
+    },
+    setItems: (state, payload) => {
+      state.items = payload
+    },
+    pushItem: (state, payload) => {
+      state.items.push(payload)
+    },
   },
   actions: {
+
+    addItem: async ({ commit }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      await dbPromise.add('items', payload).then(() => {
+        commit('pushItem', payload)
+      })
+
+
+    },
     addHouse: async ({ commit }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.add('houses', payload);
-      commit('pushHouse', payload)
+      await dbPromise.add('houses', payload).then(() => {
+        commit('pushHouse', payload)
+      })
 
+
+    },
+    getItems: async ({ commit }) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      const value = await dbPromise.getAll('items');
+
+      commit('setItems', value)
     },
     getHouses: async ({ commit }) => {
       const dbPromise = await openDB('wdipi-db1');

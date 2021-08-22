@@ -19,11 +19,7 @@
 			<v-card>
 				<v-card-title>Add Item</v-card-title>
 				<v-card-text>
-					<v-select
-						:items="['Boston', 'Greenpoint']"
-						label="House"
-						v-model="home"
-					></v-select>
+					<v-select :items="houses" label="House" v-model="home"></v-select>
 					<v-text-field label="Item name" v-model="name"></v-text-field>
 					<v-subheader class="pl-0"> Qty </v-subheader>
 					<v-slider v-model="qty" thumb-label></v-slider>
@@ -31,7 +27,6 @@
 						v-model="category"
 						:items="['Clothing', 'Food', 'Living Room']"
 						label="Category"
-						multiple
 						chips
 					></v-combobox>
 				</v-card-text>
@@ -68,14 +63,16 @@ export default {
 	},
 	methods: {
 		saveItem() {
-			// var newItem = {
-			// 	name: this.name,
-			// 	qty: this.qty,
-			// 	home: this.home,
-			// 	category: this.category,
-			// };
+			var newItem = {
+				name: this.name,
+				qty: this.qty,
+				home: this.home,
+				category: this.category,
+			};
+
 			// adding to indexeddb
-			this.$store.dispatch("addHouse", { name: "Boston" });
+			this.$store.dispatch("addItem", newItem);
+			this.dialog = false;
 		},
 	},
 };

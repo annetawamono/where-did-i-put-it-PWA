@@ -30,6 +30,7 @@ import { mapGetters } from "vuex";
 export default {
 	name: "Home",
 	created() {
+		// TODO: move to App component
 		this.handleHouses();
 		this.handleItems();
 	},

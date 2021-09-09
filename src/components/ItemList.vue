@@ -20,7 +20,14 @@
 								>
 							</v-list-item>
 							<v-list-item>
-								<v-list-item-title>Edit</v-list-item-title>
+								<v-list-item-title
+									@click="
+										itemKey = item.id;
+										itemDialog = item;
+										dialogEdit = true;
+									"
+									>Edit</v-list-item-title
+								>
 							</v-list-item>
 							<v-list-item>
 								<v-list-item-title
@@ -54,7 +61,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" outlined @click="updateItem"> Move </v-btn>
-					<v-btn color="secondary" @click="dialog = false"> Cancel </v-btn>
+					<v-btn color="secondary" @click="dialogMove = false"> Cancel </v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -71,24 +78,30 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
+		<v-dialog v-model="dialogEdit">
+			<item-dialog :item="itemDialog"></item-dialog>
+		</v-dialog>
 	</div>
 </template>
 <script>
 import { VSelect } from "vuetify/lib";
 import { mapGetters } from "vuex";
+import ItemDialog from "./ItemDialog.vue";
 
 export default {
-	name: "ItemList",
-	props: ["items"],
 	components: {
 		VSelect,
+		ItemDialog,
 	},
+	props: ["items"],
 	data: function () {
 		return {
 			dialogMove: false,
 			dialogDelete: false,
+			dialogEdit: false,
 			home: "",
 			itemKey: -1,
+			itemDialog: {},
 		};
 	},
 	computed: {

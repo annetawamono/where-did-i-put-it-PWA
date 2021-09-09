@@ -13,8 +13,8 @@
 							<v-list-item>
 								<v-list-item-title
 									@click="
-										updateItemKey = item.id;
-										dialog = true;
+										itemKey = item.id;
+										dialogMove = true;
 									"
 									>Move to</v-list-item-title
 								>
@@ -23,7 +23,13 @@
 								<v-list-item-title>Edit</v-list-item-title>
 							</v-list-item>
 							<v-list-item>
-								<v-list-item-title>Delete</v-list-item-title>
+								<v-list-item-title
+									@click="
+										itemKey = item.id;
+										dialogDelete = true;
+									"
+									>Delete</v-list-item-title
+								>
 							</v-list-item>
 						</v-list>
 					</v-menu>
@@ -38,16 +44,30 @@
 				</v-list-item-content>
 			</v-list-item>
 		</v-list>
-		<v-dialog v-model="dialog">
+		<v-dialog v-model="dialogMove">
 			<v-card>
-				<v-card-title>Move item to another house:</v-card-title>
+				<v-card-title>Move</v-card-title>
+				<v-card-subtitle>Move item to another house:</v-card-subtitle>
 				<v-card-text>
 					<v-select :items="houses" label="House" v-model="home"></v-select>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color="primary" outlined @click="updateItem"> Move </v-btn>
-					<v-btn color="error" @click="dialog = false"> Cancel </v-btn>
+					<v-btn color="secondary" @click="dialog = false"> Cancel </v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-dialog v-model="dialogDelete">
+			<v-card>
+				<v-card-title>Delete</v-card-title>
+				<v-card-text>Are you sure?</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="error" @click="deleteItem"> Delete </v-btn>
+					<v-btn color="secondary" outlined @click="dialogDelete = false">
+						Cancel
+					</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -65,9 +85,10 @@ export default {
 	},
 	data: function () {
 		return {
-			dialog: false,
+			dialogMove: false,
+			dialogDelete: false,
 			home: "",
-			updateItemKey: -1,
+			itemKey: -1,
 		};
 	},
 	computed: {
@@ -75,9 +96,13 @@ export default {
 	},
 	methods: {
 		updateItem() {
-			let moveData = { home: this.home, key: this.updateItemKey };
-			this.$store.dispatch("updateHouse", moveData);
-			this.dialog = false;
+			const moveData = { home: this.home, key: this.itemKey };
+			this.$store.dispatch("updateItemHouse", moveData);
+			this.dialogMove = false;
+		},
+		deleteItem() {
+			this.$store.dispatch("deleteItem", this.itemKey);
+			this.dialogDelete = false;
 		},
 	},
 };

@@ -67,7 +67,7 @@ export default new Vuex.Store({
       commit('setHouses', value)
 
     },
-    updateHouse: async ({ commit, state }, payload) => {
+    updateItemHouse: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
       const tx = dbPromise.transaction('items', 'readwrite');
@@ -93,6 +93,18 @@ export default new Vuex.Store({
 
       await tx.done;
 
+    },
+    deleteItem: async ({ commit, state }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      await dbPromise.delete('items', payload).then(() => {
+        // update the item store in vuex
+        const index = state.items.findIndex(item => item.id === payload);
+        const updateItems = [...state.items.slice(0, index), ...state.items.slice(index + 1)]
+        commit('setItems', updateItems);
+      }).catch(err => {
+        console.error(err);
+      })
     }
   },
   getters: {

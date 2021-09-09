@@ -3,7 +3,7 @@
 		<v-main>
 			<router-view />
 		</v-main>
-		<add-item></add-item>
+
 		<v-bottom-navigation v-model="value" color="primary" grow height="12vh">
 			<router-link to="/">
 				<v-btn color="white" value="home">
@@ -23,17 +23,24 @@
 </template>
 
 <script>
-import AddItem from "./components/AddItem.vue";
-
 export default {
 	name: "App",
-
-	components: {
-		AddItem,
+	created() {
+		this.handleHouses();
+		this.handleItems();
 	},
 
 	data: () => ({
 		value: "home",
 	}),
+
+	methods: {
+		handleItems() {
+			this.$store.dispatch("getItems");
+		},
+		handleHouses() {
+			this.$store.dispatch("getHouses");
+		},
+	},
 };
 </script>

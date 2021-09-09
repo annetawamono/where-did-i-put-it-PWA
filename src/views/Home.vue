@@ -17,6 +17,7 @@
 
 		<ItemList v-if="selectedFilters.length > 0" v-bind:items="filteredItems" />
 		<ItemList v-else v-bind:items="houseItems" />
+		<add-item></add-item>
 	</div>
 </template>
 
@@ -26,18 +27,16 @@ import FilterBar from "@/components/FilterBar.vue";
 import Header from "@/components/Header.vue";
 import ItemList from "@/components/ItemList.vue";
 import { mapGetters } from "vuex";
+import AddItem from "../components/AddItem.vue";
 
 export default {
 	name: "Home",
-	created() {
-		// TODO: move to App component
-		this.handleHouses();
-		this.handleItems();
-	},
+
 	components: {
 		FilterBar,
 		Header,
 		ItemList,
+		AddItem,
 	},
 	data: () => ({
 		pageTitle: "I definitely put it in",
@@ -54,12 +53,6 @@ export default {
 		selectedFilters: [],
 	}),
 	methods: {
-		handleItems() {
-			this.$store.dispatch("getItems");
-		},
-		handleHouses() {
-			this.$store.dispatch("getHouses");
-		},
 		changeView(newView) {
 			this.homeView = newView;
 		},

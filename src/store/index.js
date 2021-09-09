@@ -1,6 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { openDB } from 'idb'
+import Vue from 'vue';
+import Vuex from 'vuex';
+// import { openDB } from 'idb';
+import { openDB } from 'idb/with-async-ittr.js';
 
 Vue.use(Vuex)
 
@@ -28,8 +29,12 @@ export default new Vuex.Store({
     addItem: async ({ commit }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.add('items', payload).then(() => {
-        commit('pushItem', payload)
+      await dbPromise.add('items', payload).then((validKey) => {
+        let newPayload = {
+          ...payload,
+          id: validKey
+        }
+        commit('pushItem', newPayload)
       })
 
 
@@ -37,8 +42,12 @@ export default new Vuex.Store({
     addHouse: async ({ commit }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.add('houses', payload).then(() => {
-        commit('pushHouse', payload)
+      await dbPromise.add('houses', payload).then((validKey) => {
+        let newPayload = {
+          ...payload,
+          id: validKey
+        }
+        commit('pushHouse', newPayload)
       })
 
 
@@ -56,6 +65,33 @@ export default new Vuex.Store({
       const value = await dbPromise.getAll('houses');
 
       commit('setHouses', value)
+
+    },
+    updateHouse: async ({ commit, state }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      const tx = dbPromise.transaction('items', 'readwrite');
+
+      for await (const cursor of tx.store) {
+
+        if (cursor.key === payload.key) {
+          let updateData = { ...cursor.value };
+          updateData.home = payload.home;
+
+          cursor.update(updateData).then(() => {
+            // update the item store in vuex
+            const index = state.items.findIndex(item => item.id === payload.key);
+            const updateItems = [...state.items.slice(0, index), updateData, ...state.items.slice(index + 1)]
+            commit('setItems', updateItems);
+          }).catch(err => {
+            console.error(err);
+          })
+
+        }
+
+      }
+
+      await tx.done;
 
     }
   },

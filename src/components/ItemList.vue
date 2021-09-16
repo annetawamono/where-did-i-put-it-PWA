@@ -23,7 +23,10 @@
 								<v-list-item-title
 									@click="
 										itemKey = item.id;
-										itemDialog = item;
+										qty = item.qty;
+										name = item.name;
+										itemHome = item.home;
+										category = item.category;
 										dialogEdit = true;
 									"
 									>Edit</v-list-item-title
@@ -60,7 +63,7 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="primary" outlined @click="updateItem"> Move </v-btn>
+					<v-btn color="primary" outlined @click="moveItem"> Move </v-btn>
 					<v-btn color="secondary" @click="dialogMove = false"> Cancel </v-btn>
 				</v-card-actions>
 			</v-card>
@@ -79,19 +82,36 @@
 			</v-card>
 		</v-dialog>
 		<v-dialog v-model="dialogEdit">
-			<item-dialog :item="itemDialog"></item-dialog>
+			<v-card>
+				<v-card-title>Edit Item</v-card-title>
+				<v-card-text>
+					<v-select :items="houses" label="House" v-model="itemHome"></v-select>
+					<v-text-field label="Item name" v-model="name"></v-text-field>
+					<v-subheader class="pl-0"> Qty </v-subheader>
+					<v-slider v-model="qty" thumb-label></v-slider>
+					<v-combobox
+						v-model="category"
+						:items="['Clothing', 'Food', 'Living Room']"
+						label="Category"
+						chips
+					></v-combobox>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="primary" outlined> Confirm </v-btn>
+					<v-btn color="secondary" @click="dialogEdit = false"> Cancel </v-btn>
+				</v-card-actions>
+			</v-card>
 		</v-dialog>
 	</div>
 </template>
 <script>
 import { VSelect } from "vuetify/lib";
 import { mapGetters } from "vuex";
-import ItemDialog from "./ItemDialog.vue";
 
 export default {
 	components: {
 		VSelect,
-		ItemDialog,
 	},
 	props: ["items"],
 	data: function () {
@@ -101,17 +121,24 @@ export default {
 			dialogEdit: false,
 			home: "",
 			itemKey: -1,
-			itemDialog: {},
+			itemDialog: null,
+			qty: 0,
+			name: "",
+			itemHome: "",
+			category: "",
 		};
 	},
 	computed: {
 		...mapGetters(["houses"]),
 	},
 	methods: {
-		updateItem() {
+		moveItem() {
 			const moveData = { home: this.home, key: this.itemKey };
 			this.$store.dispatch("updateItemHouse", moveData);
 			this.dialogMove = false;
+		},
+		updateItem() {
+			// TODO: refactor updateItemHouse action to be able to update all item deets
 		},
 		deleteItem() {
 			this.$store.dispatch("deleteItem", this.itemKey);

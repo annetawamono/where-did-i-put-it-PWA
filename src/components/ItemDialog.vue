@@ -2,7 +2,7 @@
 	<v-card>
 		<v-card-title>Add Item</v-card-title>
 		<v-card-text>
-			<v-select :items="houses" label="House" v-model="item.home"></v-select>
+			<v-select :items="houses" label="House" v-model="home"></v-select>
 			<v-text-field label="Item name" v-model="name"></v-text-field>
 			<v-subheader class="pl-0"> Qty </v-subheader>
 			<v-slider v-model="qty" thumb-label></v-slider>
@@ -29,9 +29,7 @@ export default {
 	components: {
 		VSelect,
 	},
-	props: {
-		item: { type: Object },
-	},
+
 	data: function () {
 		return {
 			qty: 0,

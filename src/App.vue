@@ -4,20 +4,20 @@
 			<router-view />
 		</v-main>
 
-		<v-bottom-navigation v-model="value" color="primary" grow height="12vh">
-			<router-link to="/">
-				<v-btn color="white" value="home">
-					<span>Homes</span>
-					<v-icon>mdi-home-outline</v-icon>
-				</v-btn>
-			</router-link>
+		<v-bottom-navigation v-model="value" color="primary" height="12vh">
+			<!-- <router-link to="/"> -->
+			<v-btn color="white" value="home" to="/">
+				<span>Homes</span>
+				<v-icon>mdi-home-outline</v-icon>
+			</v-btn>
+			<!-- </router-link> -->
 
-			<router-link to="/settings">
-				<v-btn color="white" value="settings">
-					<span>Settings</span>
-					<v-icon>mdi-home-edit-outline</v-icon>
-				</v-btn>
-			</router-link>
+			<!-- <router-link to="/settings"> -->
+			<v-btn color="white" value="settings" to="/settings">
+				<span>Settings</span>
+				<v-icon>mdi-home-edit-outline</v-icon>
+			</v-btn>
+			<!-- </router-link> -->
 		</v-bottom-navigation>
 	</v-app>
 </template>

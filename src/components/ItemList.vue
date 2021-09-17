@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="item-list">
 		<v-list>
 			<v-list-item v-for="item in items" :key="item.id">
 				<v-list-item-icon>
@@ -151,3 +151,10 @@ export default {
 	},
 };
 </script>
+
+<style>
+.item-list {
+	max-height: 50vh;
+	overflow-y: scroll;
+}
+</style>

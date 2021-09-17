@@ -69,17 +69,10 @@
 			</v-card>
 		</v-dialog>
 		<v-dialog v-model="dialogDelete">
-			<v-card>
-				<v-card-title>Delete</v-card-title>
-				<v-card-text>Are you sure?</v-card-text>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<v-btn color="error" @click="deleteItem"> Delete </v-btn>
-					<v-btn color="secondary" outlined @click="dialogDelete = false">
-						Cancel
-					</v-btn>
-				</v-card-actions>
-			</v-card>
+			<delete-dialog
+				@onClickDelete="deleteItem"
+				@onClickCancel="dialogDelete = false"
+			></delete-dialog>
 		</v-dialog>
 		<v-dialog v-model="dialogEdit">
 			<v-card>
@@ -108,10 +101,12 @@
 <script>
 import { VSelect } from "vuetify/lib";
 import { mapGetters } from "vuex";
+import DeleteDialog from "../components/DeleteDialog.vue";
 
 export default {
 	components: {
 		VSelect,
+		DeleteDialog,
 	},
 	props: ["items"],
 	data: function () {

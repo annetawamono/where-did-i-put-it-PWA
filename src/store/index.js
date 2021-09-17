@@ -135,6 +135,18 @@ export default new Vuex.Store({
       }).catch(err => {
         console.error(err);
       })
+    },
+    deleteHouse: async ({ commit, state }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      await dbPromise.delete('houses', payload).then(() => {
+        // update the houses store in vuex
+        const index = state.houses.findIndex(house => house.id === payload);
+        const updateHouses = [...state.houses.slice(0, index), ...state.houses.slice(index + 1)]
+        commit('setHouses', updateHouses)
+      }).catch(err => {
+        console.error(err);
+      })
     }
   },
   getters: {
@@ -145,6 +157,7 @@ export default new Vuex.Store({
       }
       return housesArray
     },
+    housesWithKeys: state => state.houses,
     items: state => state.items
   },
   modules: {

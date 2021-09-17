@@ -94,6 +94,36 @@ export default new Vuex.Store({
       await tx.done;
 
     },
+    updateItem: async ({ commit, state }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      const tx = dbPromise.transaction('items', 'readwrite');
+
+      for await (const cursor of tx.store) {
+
+        if (cursor.key === payload.key) {
+          let updateData = { ...cursor.value };
+          updateData.home = payload.home;
+          updateData.qty = payload.qty;
+          updateData.name = payload.name;
+          updateData.category = payload.category;
+
+          cursor.update(updateData).then(() => {
+            // update the item store in vuex
+            const index = state.items.findIndex(item => item.id === payload.key);
+            const updateItems = [...state.items.slice(0, index), updateData, ...state.items.slice(index + 1)]
+            commit('setItems', updateItems);
+          }).catch(err => {
+            console.error(err);
+          })
+
+        }
+
+      }
+
+      await tx.done;
+
+    },
     deleteItem: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 

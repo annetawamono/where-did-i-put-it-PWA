@@ -98,7 +98,7 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="primary" outlined> Confirm </v-btn>
+					<v-btn color="primary" outlined @click="updateItem"> Confirm </v-btn>
 					<v-btn color="secondary" @click="dialogEdit = false"> Cancel </v-btn>
 				</v-card-actions>
 			</v-card>
@@ -138,7 +138,16 @@ export default {
 			this.dialogMove = false;
 		},
 		updateItem() {
-			// TODO: refactor updateItemHouse action to be able to update all item deets
+			const updateData = {
+				key: this.itemKey,
+				home: this.itemHome,
+				qty: this.qty,
+				name: this.name,
+				category: this.category,
+			};
+
+			this.$store.dispatch("updateItem", updateData);
+			this.dialogEdit = false;
 		},
 		deleteItem() {
 			this.$store.dispatch("deleteItem", this.itemKey);

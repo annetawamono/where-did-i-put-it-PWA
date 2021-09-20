@@ -124,6 +124,29 @@ export default new Vuex.Store({
       await tx.done;
 
     },
+    updateHouse: async ({ commit, state }, payload) => {
+      const dbPromise = await openDB('wdipi-db1');
+
+      const tx = dbPromise.transaction('houses', 'readwrite');
+
+      for await (const cursor of tx.store) {
+        if (cursor.key === payload.key) {
+          let updateData = { ...cursor.value };
+          updateData.name = payload.name;
+
+          cursor.update(updateData).then(() => {
+            // update the house store in vuex
+            const index = state.houses.findIndex(house => house.id === payload.key);
+            const updateHouses = [...state.houses.slice(0, index), updateData, ...state.houses.slice(index + 1)];
+            commit('setHouses', updateHouses);
+          }).catch(err => {
+            console.error(err);
+          })
+        }
+      }
+
+      await tx.done;
+    },
     deleteItem: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 

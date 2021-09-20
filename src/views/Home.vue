@@ -42,6 +42,7 @@ export default {
 		pageTitle: "I definitely put it in",
 		homes: ["Green Point", "Boston"],
 		homeView: "Green Point",
+		// TODO: make store for filters
 		filters: [
 			"Food",
 			"Clothing",

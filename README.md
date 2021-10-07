@@ -1,4 +1,4 @@
-# Where did I put it
+# Where did I put it :woman_shrugging:
 
 This app is designed for **mobile use only** so far. This project was motivated by my mom forgetting her things in the different houses she lives in, and I wanted to create a mobile app experience to solve this issue for her by using a PWA and indexedDB.
 

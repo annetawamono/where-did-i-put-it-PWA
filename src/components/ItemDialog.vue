@@ -4,8 +4,17 @@
 		<v-card-text>
 			<v-select :items="houses" label="House" v-model="home"></v-select>
 			<v-text-field label="Item name" v-model="name"></v-text-field>
-			<v-subheader class="pl-0"> Qty </v-subheader>
-			<v-slider v-model="qty" thumb-label></v-slider>
+			<!-- <v-subheader class="pl-0"> Qty </v-subheader> -->
+			<v-slider
+				v-model="qty"
+				thumb-label="always"
+				min="0"
+				max="10"
+				label="Qty"
+				:style="{
+					marginTop: 1.5 + 'rem',
+				}"
+			></v-slider>
 			<v-combobox
 				v-model="category"
 				:items="['Clothing', 'Food', 'Living Room']"

@@ -1,6 +1,6 @@
 # Where did I put it :woman_shrugging:
 
-This app is designed for **mobile use only** so far. This project was motivated by my mom forgetting her things in the different houses she lives in, and I wanted to create a mobile app experience to solve this issue for her by using a PWA and indexedDB.
+This app is designed for **mobile use only** currently. I was motivated to create this project because my mom kept forgetting which house she left her things. I wanted to solve her problem by creating a mobile app that keeps track of where her things are. I leveraged my web dev skills to create a mobile app using a PWA and IndexedDB.
 
 ## Project details
 - State management is maintained by [vuex](https://vuex.vuejs.org/).

@@ -15,7 +15,7 @@ This is a list of features and fixes I intend to address for the project:
 - [ ] Onboarding screen
 - [ ] Snackbar to alert users when a CRUD action has taken place
 - [ ] Move item categories to state management
-- [ ] Fix qty slider to be more user friendly
+- [X] Fix qty slider to be more user friendly
 - [ ] Change PWA loading screen
 - [ ] Add logo to favicon and app icon
 

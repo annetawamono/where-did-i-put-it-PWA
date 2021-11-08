@@ -1,5 +1,19 @@
 <template>
 	<div class="item-list">
+		<!-- Snackbar -->
+		<v-snackbar
+			@input="resetAlert"
+			:value="alert.display"
+			absolute
+			left
+			rounded="pill"
+			top
+			width="200"
+			color="accent"
+		>
+			{{ alert.message }}
+		</v-snackbar>
+
 		<v-list>
 			<v-list-item v-for="item in items" :key="item.id">
 				<v-list-item-icon>
@@ -14,6 +28,7 @@
 								<v-list-item-title
 									@click="
 										itemKey = item.id;
+										name = item.name;
 										dialogMove = true;
 									"
 									>Move to</v-list-item-title
@@ -132,11 +147,15 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["houses"]),
+		...mapGetters(["houses", "alert"]),
 	},
 	methods: {
+		resetAlert() {
+			this.$store.dispatch("resetAlert");
+		},
+
 		moveItem() {
-			const moveData = { home: this.home, key: this.itemKey };
+			const moveData = { home: this.home, key: this.itemKey, name: this.name };
 			this.$store.dispatch("updateItemHouse", moveData);
 			this.dialogMove = false;
 		},

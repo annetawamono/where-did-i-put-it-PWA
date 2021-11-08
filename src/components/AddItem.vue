@@ -6,8 +6,10 @@
 			:value="alert.display"
 			absolute
 			left
-			shaped
+			rounded="pill"
 			top
+			width="200"
+			color="accent"
 		>
 			{{ alert.message }}
 		</v-snackbar>

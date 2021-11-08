@@ -104,8 +104,18 @@ export default new Vuex.Store({
             const index = state.items.findIndex(item => item.id === payload.key);
             const updateItems = [...state.items.slice(0, index), updateData, ...state.items.slice(index + 1)]
             commit('setItems', updateItems);
+
+            let alert = {
+              display: true,
+              message: payload.name + " moved to " + payload.home,
+            }
+            commit('setAlert', alert);
           }).catch(err => {
-            console.error(err);
+            let alert = {
+              display: true,
+              message: err
+            }
+            commit('setAlert', alert);
           })
 
         }

@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     houses: [{ name: "sommerset" }],
     items: [],
+    alert: { display: false, message: "" },
   },
   mutations: {
     setHouses: (state, payload) => {
@@ -23,8 +24,15 @@ export default new Vuex.Store({
     pushItem: (state, payload) => {
       state.items.push(payload)
     },
+    setAlert: (state, payload) => {
+      state.alert = payload;
+    }
   },
   actions: {
+
+    resetAlert: ({ commit }) => {
+      commit('setAlert', { display: false, message: "" });
+    },
 
     addItem: async ({ commit }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
@@ -34,7 +42,20 @@ export default new Vuex.Store({
           ...payload,
           id: validKey
         }
-        commit('pushItem', newPayload)
+        commit('pushItem', newPayload);
+
+        let alert = {
+          display: true,
+          message: payload.name + " added."
+        }
+        commit('setAlert', alert);
+
+      }).catch(err => {
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
 
 
@@ -181,7 +202,8 @@ export default new Vuex.Store({
       return housesArray
     },
     housesWithKeys: state => state.houses,
-    items: state => state.items
+    items: state => state.items,
+    alert: state => state.alert,
   },
   modules: {
   }

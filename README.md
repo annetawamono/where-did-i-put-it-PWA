@@ -18,6 +18,7 @@ This is a list of features and fixes I intend to address for the project:
 - [X] Fix qty slider to be more user friendly
 - [ ] Change PWA loading screen
 - [ ] Add logo to favicon and app icon
+- [ ] Form validation
 
 ## Project setup
 ```

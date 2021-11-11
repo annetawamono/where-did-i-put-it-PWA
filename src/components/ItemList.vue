@@ -51,6 +51,7 @@
 								<v-list-item-title
 									@click="
 										itemKey = item.id;
+										name = item.name;
 										dialogDelete = true;
 									"
 									>Delete</v-list-item-title
@@ -172,7 +173,8 @@ export default {
 			this.dialogEdit = false;
 		},
 		deleteItem() {
-			this.$store.dispatch("deleteItem", this.itemKey);
+			const deleteData = { key: this.itemKey, name: this.name };
+			this.$store.dispatch("deleteItem", deleteData);
 			this.dialogDelete = false;
 		},
 	},

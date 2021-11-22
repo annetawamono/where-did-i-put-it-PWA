@@ -14,7 +14,7 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="primary" outlined @click="saveHouse"> Confirm </v-btn>
+					<v-btn color="primary" outlined @click="submit"> Confirm </v-btn>
 					<v-btn color="secondary" @click="dialog = false"> Cancel </v-btn>
 				</v-card-actions>
 			</v-card>
@@ -31,12 +31,8 @@ export default {
 		};
 	},
 	methods: {
-		saveHouse() {
-			var newHouse = {
-				name: this.houseName,
-			};
-			// adding to indexeddb
-			this.$store.dispatch("addHouse", newHouse);
+		submit() {
+			this.$emit("submit", this.houseName);
 			this.dialog = false;
 		},
 	},

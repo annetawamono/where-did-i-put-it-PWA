@@ -68,7 +68,19 @@ export default new Vuex.Store({
           ...payload,
           id: validKey
         }
-        commit('pushHouse', newPayload)
+        commit('pushHouse', newPayload);
+
+        let alert = {
+          display: true,
+          message: payload.name + " added.",
+        }
+        commit('setAlert', alert);
+      }).catch(err => {
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
 
 
@@ -166,6 +178,8 @@ export default new Vuex.Store({
 
     },
     updateHouse: async ({ commit, state }, payload) => {
+      // TODO: When user updates, corresponding item houses need to update too. Can store item with house ID instead of name.
+
       const dbPromise = await openDB('wdipi-db1');
 
       const tx = dbPromise.transaction('houses', 'readwrite');
@@ -180,8 +194,18 @@ export default new Vuex.Store({
             const index = state.houses.findIndex(house => house.id === payload.key);
             const updateHouses = [...state.houses.slice(0, index), updateData, ...state.houses.slice(index + 1)];
             commit('setHouses', updateHouses);
+
+            let alert = {
+              display: true,
+              message: payload.name + " updated.",
+            }
+            commit('setAlert', alert);
           }).catch(err => {
-            console.error(err);
+            let alert = {
+              display: true,
+              message: err
+            }
+            commit('setAlert', alert);
           })
         }
       }
@@ -213,13 +237,23 @@ export default new Vuex.Store({
     deleteHouse: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.delete('houses', payload).then(() => {
+      await dbPromise.delete('houses', payload.key).then(() => {
         // update the houses store in vuex
-        const index = state.houses.findIndex(house => house.id === payload);
+        const index = state.houses.findIndex(house => house.id === payload.key);
         const updateHouses = [...state.houses.slice(0, index), ...state.houses.slice(index + 1)]
-        commit('setHouses', updateHouses)
+        commit('setHouses', updateHouses);
+
+        let alert = {
+          display: true,
+          message: payload.name + " was deleted.",
+        }
+        commit('setAlert', alert);
       }).catch(err => {
-        console.error(err);
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
     }
   },

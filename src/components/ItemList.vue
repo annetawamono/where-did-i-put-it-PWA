@@ -160,6 +160,8 @@ export default {
 			this.$store.dispatch("updateItemHouse", moveData);
 			this.dialogMove = false;
 		},
+
+		// TODO: Move dialogs to own components: https://vuejs.org/v2/guide/components.html#:~:text=Custom%20events%20can%20also%20be%20used%20to%20create%20custom%20inputs%20that%20work%20with%20v%2Dmodel
 		updateItem() {
 			const updateData = {
 				key: this.itemKey,

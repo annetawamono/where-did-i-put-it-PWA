@@ -1,13 +1,27 @@
 <template>
 	<div>
 		<Header :pageTitle="pageTitle"></Header>
+		<!-- Snackbar -->
+		<v-snackbar
+			@input="resetAlert"
+			:value="alert.display"
+			absolute
+			left
+			rounded="pill"
+			top
+			width="200"
+			color="accent"
+		>
+			{{ alert.message }}
+		</v-snackbar>
 		<v-list>
 			<v-list-item>
 				<v-list-item-content>
 					<v-list-item-subtitle>Homes</v-list-item-subtitle>
 				</v-list-item-content>
 				<v-list-item-action>
-					<add-house></add-house>
+					<!-- Add House -->
+					<add-house @submit="saveHouse"></add-house>
 				</v-list-item-action>
 			</v-list-item>
 			<template v-for="(house, index) in housesWithKeys">
@@ -28,6 +42,7 @@
 							@click="
 								dialogDelete = true;
 								houseKey = house.id;
+								houseName = house.name;
 							"
 							>mdi-trash-can-outline</v-icon
 						>
@@ -67,6 +82,7 @@ import AddHouse from "../components/AddHouse.vue";
 import DeleteDialog from "../components/DeleteDialog.vue";
 
 import { mapGetters } from "vuex";
+
 export default {
 	components: {
 		Header,
@@ -83,11 +99,25 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["housesWithKeys"]),
+		...mapGetters(["housesWithKeys", "alert"]),
 	},
 	methods: {
+		resetAlert() {
+			this.$store.dispatch("resetAlert");
+		},
+
+		saveHouse: function (houseName) {
+			const newHouse = {
+				name: houseName,
+			};
+			this.$store.dispatch("addHouse", newHouse);
+		},
 		deleteHouse() {
-			this.$store.dispatch("deleteHouse", this.houseKey);
+			const deleteData = {
+				name: this.houseName,
+				key: this.houseKey,
+			};
+			this.$store.dispatch("deleteHouse", deleteData);
 			this.dialogDelete = false;
 		},
 		updateHouse() {

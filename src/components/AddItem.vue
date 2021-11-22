@@ -1,5 +1,19 @@
 <template>
 	<div>
+		<!-- Snackbar -->
+		<v-snackbar
+			@input="resetAlert"
+			:value="alert.display"
+			absolute
+			left
+			rounded="pill"
+			top
+			width="200"
+			color="accent"
+		>
+			{{ alert.message }}
+		</v-snackbar>
+
 		<v-dialog v-model="dialog">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn
@@ -23,6 +37,7 @@
 
 <script>
 import ItemDialog from "./ItemDialog.vue";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -40,6 +55,12 @@ export default {
 			this.$store.dispatch("addItem", value);
 			this.dialog = false;
 		},
+		resetAlert() {
+			this.$store.dispatch("resetAlert");
+		},
+	},
+	computed: {
+		...mapGetters(["alert"]),
 	},
 };
 </script>

@@ -1,5 +1,19 @@
 <template>
 	<div class="item-list">
+		<!-- Snackbar -->
+		<v-snackbar
+			@input="resetAlert"
+			:value="alert.display"
+			absolute
+			left
+			rounded="pill"
+			top
+			width="200"
+			color="accent"
+		>
+			{{ alert.message }}
+		</v-snackbar>
+
 		<v-list>
 			<v-list-item v-for="item in items" :key="item.id">
 				<v-list-item-icon>
@@ -14,6 +28,7 @@
 								<v-list-item-title
 									@click="
 										itemKey = item.id;
+										name = item.name;
 										dialogMove = true;
 									"
 									>Move to</v-list-item-title
@@ -36,6 +51,7 @@
 								<v-list-item-title
 									@click="
 										itemKey = item.id;
+										name = item.name;
 										dialogDelete = true;
 									"
 									>Delete</v-list-item-title
@@ -132,14 +148,20 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["houses"]),
+		...mapGetters(["houses", "alert"]),
 	},
 	methods: {
+		resetAlert() {
+			this.$store.dispatch("resetAlert");
+		},
+
 		moveItem() {
-			const moveData = { home: this.home, key: this.itemKey };
+			const moveData = { home: this.home, key: this.itemKey, name: this.name };
 			this.$store.dispatch("updateItemHouse", moveData);
 			this.dialogMove = false;
 		},
+
+		// TODO: Move dialogs to own components: https://vuejs.org/v2/guide/components.html#:~:text=Custom%20events%20can%20also%20be%20used%20to%20create%20custom%20inputs%20that%20work%20with%20v%2Dmodel
 		updateItem() {
 			const updateData = {
 				key: this.itemKey,
@@ -153,7 +175,8 @@ export default {
 			this.dialogEdit = false;
 		},
 		deleteItem() {
-			this.$store.dispatch("deleteItem", this.itemKey);
+			const deleteData = { key: this.itemKey, name: this.name };
+			this.$store.dispatch("deleteItem", deleteData);
 			this.dialogDelete = false;
 		},
 	},

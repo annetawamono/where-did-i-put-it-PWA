@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     houses: [{ name: "sommerset" }],
     items: [],
+    alert: { display: false, message: "" },
   },
   mutations: {
     setHouses: (state, payload) => {
@@ -23,8 +24,15 @@ export default new Vuex.Store({
     pushItem: (state, payload) => {
       state.items.push(payload)
     },
+    setAlert: (state, payload) => {
+      state.alert = payload;
+    }
   },
   actions: {
+
+    resetAlert: ({ commit }) => {
+      commit('setAlert', { display: false, message: "" });
+    },
 
     addItem: async ({ commit }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
@@ -34,7 +42,20 @@ export default new Vuex.Store({
           ...payload,
           id: validKey
         }
-        commit('pushItem', newPayload)
+        commit('pushItem', newPayload);
+
+        let alert = {
+          display: true,
+          message: payload.name + " added to " + payload.home + ".",
+        }
+        commit('setAlert', alert);
+
+      }).catch(err => {
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
 
 
@@ -47,7 +68,19 @@ export default new Vuex.Store({
           ...payload,
           id: validKey
         }
-        commit('pushHouse', newPayload)
+        commit('pushHouse', newPayload);
+
+        let alert = {
+          display: true,
+          message: payload.name + " added.",
+        }
+        commit('setAlert', alert);
+      }).catch(err => {
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
 
 
@@ -83,8 +116,18 @@ export default new Vuex.Store({
             const index = state.items.findIndex(item => item.id === payload.key);
             const updateItems = [...state.items.slice(0, index), updateData, ...state.items.slice(index + 1)]
             commit('setItems', updateItems);
+
+            let alert = {
+              display: true,
+              message: payload.name + " moved to " + payload.home,
+            }
+            commit('setAlert', alert);
           }).catch(err => {
-            console.error(err);
+            let alert = {
+              display: true,
+              message: err
+            }
+            commit('setAlert', alert);
           })
 
         }
@@ -113,8 +156,18 @@ export default new Vuex.Store({
             const index = state.items.findIndex(item => item.id === payload.key);
             const updateItems = [...state.items.slice(0, index), updateData, ...state.items.slice(index + 1)]
             commit('setItems', updateItems);
+
+            let alert = {
+              display: true,
+              message: payload.name + " was edited.",
+            }
+            commit('setAlert', alert);
           }).catch(err => {
-            console.error(err);
+            let alert = {
+              display: true,
+              message: err
+            }
+            commit('setAlert', alert);
           })
 
         }
@@ -125,6 +178,8 @@ export default new Vuex.Store({
 
     },
     updateHouse: async ({ commit, state }, payload) => {
+      // TODO: When user updates, corresponding item houses need to update too. Can store item with house ID instead of name.
+
       const dbPromise = await openDB('wdipi-db1');
 
       const tx = dbPromise.transaction('houses', 'readwrite');
@@ -139,8 +194,18 @@ export default new Vuex.Store({
             const index = state.houses.findIndex(house => house.id === payload.key);
             const updateHouses = [...state.houses.slice(0, index), updateData, ...state.houses.slice(index + 1)];
             commit('setHouses', updateHouses);
+
+            let alert = {
+              display: true,
+              message: payload.name + " updated.",
+            }
+            commit('setAlert', alert);
           }).catch(err => {
-            console.error(err);
+            let alert = {
+              display: true,
+              message: err
+            }
+            commit('setAlert', alert);
           })
         }
       }
@@ -150,25 +215,45 @@ export default new Vuex.Store({
     deleteItem: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.delete('items', payload).then(() => {
+      await dbPromise.delete('items', payload.key).then(() => {
         // update the item store in vuex
-        const index = state.items.findIndex(item => item.id === payload);
+        const index = state.items.findIndex(item => item.id === payload.key);
         const updateItems = [...state.items.slice(0, index), ...state.items.slice(index + 1)]
         commit('setItems', updateItems);
+
+        let alert = {
+          display: true,
+          message: payload.name + " was deleted.",
+        }
+        commit('setAlert', alert);
       }).catch(err => {
-        console.error(err);
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
     },
     deleteHouse: async ({ commit, state }, payload) => {
       const dbPromise = await openDB('wdipi-db1');
 
-      await dbPromise.delete('houses', payload).then(() => {
+      await dbPromise.delete('houses', payload.key).then(() => {
         // update the houses store in vuex
-        const index = state.houses.findIndex(house => house.id === payload);
+        const index = state.houses.findIndex(house => house.id === payload.key);
         const updateHouses = [...state.houses.slice(0, index), ...state.houses.slice(index + 1)]
-        commit('setHouses', updateHouses)
+        commit('setHouses', updateHouses);
+
+        let alert = {
+          display: true,
+          message: payload.name + " was deleted.",
+        }
+        commit('setAlert', alert);
       }).catch(err => {
-        console.error(err);
+        let alert = {
+          display: true,
+          message: err
+        }
+        commit('setAlert', alert);
       })
     }
   },
@@ -181,7 +266,8 @@ export default new Vuex.Store({
       return housesArray
     },
     housesWithKeys: state => state.houses,
-    items: state => state.items
+    items: state => state.items,
+    alert: state => state.alert,
   },
   modules: {
   }

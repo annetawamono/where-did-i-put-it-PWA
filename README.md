@@ -13,7 +13,7 @@ This app is designed for **mobile use only** currently. I was motivated to creat
 This is a list of features and fixes I intend to address for the project:
 
 - [ ] Onboarding screen
-- [ ] Snackbar to alert users when a CRUD action has taken place
+- [X] Snackbar to alert users when a CRUD action has taken place
 - [ ] Move item categories to state management
 - [X] Fix qty slider to be more user friendly
 - [ ] Change PWA loading screen

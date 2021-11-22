@@ -46,7 +46,7 @@ export default new Vuex.Store({
 
         let alert = {
           display: true,
-          message: payload.name + " added."
+          message: payload.name + " added to " + payload.home + ".",
         }
         commit('setAlert', alert);
 
